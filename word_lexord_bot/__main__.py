@@ -55,6 +55,6 @@ if __name__ == "__main__":
             on_startup=on_startup_webhook,
             on_shutdown=on_shutdown,
             skip_updates=True,
-            host=settings.HOST_ADDR,
-            port=settings.HOST_PORT
+            host=settings.WEBAPP_HOST,
+            port=settings.WEBAPP_PORT
         )
