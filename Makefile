@@ -12,7 +12,7 @@ endif
 
 
 APPLICATION_NAME = word_lexord_bot
-DOCKER_RUN = docker run -p 8000:8000 -it --env-file .env $(APPLICATION_NAME)
+DOCKER_RUN = docker run -p 443:443 -it --env-file .env $(APPLICATION_NAME)
 
 
 env:
@@ -22,6 +22,15 @@ env:
 
 run:
 	python3 -m word_lexord_bot
+
+up:
+	docker compose -f docker-compose.yml up -d --remove-orphans
+
+build:
+	docker compose -f docker-compose.yml up -d --remove-orphans --build
+
+down:
+	docker compose down
 
 %::
 	echo $(MESSAGE)
