@@ -18,4 +18,6 @@ class DefaultSettings(BaseSettings):
     HOST_PATH: str = environ.get("HOST_PATH", "")
     ADMIN_ID: str = environ.get("ADMIN_ID", "")
     WEBHOOK_URL: str = f"{HOST_ADDR}:{HOST_PORT}{HOST_PATH}"
+    WEBAPP_HOST: str = environ.get("WEBAPP_HOST", "0.0.0.0")
+    WEBAPP_PORT: str = environ.get("WEBAPP_PORT", "8000")
     DEBUG: str = environ.get("DEBUG", True)
