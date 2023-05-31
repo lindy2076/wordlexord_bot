@@ -4,8 +4,6 @@ services:
   app:
     build: .
     restart: always
-    depends_on:
-      - db
     ports:
       - "443:443"
     env_file:
