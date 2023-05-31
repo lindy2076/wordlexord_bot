@@ -25,6 +25,9 @@ async def send_echo(message: types.Message):
         case "инфо":
             await message.reply(MESSAGES["INFO"], parse_mode="Markdown")
 
+        case "команды":
+            await message.reply(MESSAGES["COMMANDS"], parse_mode="Markdown")
+
         case _:
             converted = await wl_utils.try_convert(message.text)
             if converted == -1:   

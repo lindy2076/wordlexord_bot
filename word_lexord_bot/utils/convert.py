@@ -1,10 +1,10 @@
 import word_lexord as wl
 
-alphabets = set(["enu ", "enl ", "руу ", "рул "])
+alphabets = set(["enu", "enl", "руу", "рул"])
 
 async def try_convert(msg: str) -> int | str:
-    if len(msg) < 4 or msg[:4] not in alphabets:
-        return -1
+    if len(msg) < 3 or msg[:3] not in alphabets:
+        return "что-то то должно быть!!!"
     
     msg_split = msg.split()
     if len(msg_split) < 2:
