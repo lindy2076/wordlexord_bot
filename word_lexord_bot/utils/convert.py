@@ -4,7 +4,7 @@ alphabets = set(["enu", "enl", "руу", "рул"])
 
 async def try_convert(msg: str) -> int | str:
     if len(msg) < 3 or msg[:3] not in alphabets:
-        return "что-то то должно быть!!!"
+        return -1
     
     msg_split = msg.split()
     if len(msg_split) < 2:
