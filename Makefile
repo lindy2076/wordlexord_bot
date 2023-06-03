@@ -33,7 +33,7 @@ down:
 	docker compose down
 
 lint:
-	flake8 word_lexord_bot
+	flake8 word_lexord_bot --exclude word_lexord_bot/handlers/texts.py
 
 %::
 	echo $(MESSAGE)

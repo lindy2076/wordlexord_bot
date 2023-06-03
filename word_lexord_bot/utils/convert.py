@@ -4,6 +4,7 @@ from .responses import Response
 
 ALPHABETS = set(["enu", "enl", "руу", "рул"])
 
+
 def only_numbers_in(s: str) -> bool:
     """
     Returns True if s is made of digits and spaces only.
@@ -47,7 +48,7 @@ async def try_convert(msg: str) -> str:
             lang = wl.lang.ALPHABETS["RU"]["lower"]
         case _:
             return Response.IMPOSSIBLE
-    
+
     the_text = msg[4:]
     msg_converted = ""
 

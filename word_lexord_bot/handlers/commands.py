@@ -7,16 +7,20 @@ from .texts import MESSAGES
 
 
 async def send_hello(message: types.Message):
-    logging.info(f"/start from {message.from_user.id}, {message.from_user.first_name}")
-    await message.reply(MESSAGES["START_MESSAGE"], reply_markup=kb.startup_kb, parse_mode="Markdown")
+    msg_from = message.from_user
+    logging.info(f"/start from {msg_from.id}, {msg_from.first_name}")
+    await message.reply(MESSAGES["START_MESSAGE"],
+                        reply_markup=kb.startup_kb, parse_mode="Markdown")
 
 
 async def send_info(message: types.Message):
-    await message.reply(MESSAGES["INFO"], parse_mode="Markdown", reply_markup=kb.startup_kb)
+    await message.reply(MESSAGES["INFO"],
+                        parse_mode="Markdown", reply_markup=kb.startup_kb)
 
 
 async def send_commands(message: types.Message):
-    await message.reply(MESSAGES["COMMANDS"], parse_mode="Markdown", reply_markup=kb.startup_kb)
+    await message.reply(MESSAGES["COMMANDS"],
+                        parse_mode="Markdown", reply_markup=kb.startup_kb)
 
 
 async def send_echo(message: types.Message):

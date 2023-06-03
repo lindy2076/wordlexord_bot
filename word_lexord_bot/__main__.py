@@ -1,10 +1,8 @@
-import logging 
+import logging
 
-from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils import executor
-from typing import Tuple
+# from aiogram.dispatcher.webhook import SendMessage
 
 from word_lexord_bot.handlers import (
     list_of_commands
@@ -15,8 +13,8 @@ from .bot import bot
 
 logging.basicConfig(
     format='%(levelname)s:%(asctime)s %(message)s',
-    datefmt='%m/%d/%Y %I:%M:%S %p', 
-    filename='wordlexordinfo.log', 
+    datefmt='%m/%d/%Y %I:%M:%S %p',
+    filename='wordlexordinfo.log',
     level=logging.INFO
 )
 
@@ -47,7 +45,11 @@ async def on_shutdown():
 if __name__ == "__main__":
     register_commands()
     if settings.DEBUG in ["TRUE", "True", "1"]:
-        executor.start_polling(dp, skip_updates=True, on_startup=on_startup_polling)
+        executor.start_polling(
+            dp,
+            skip_updates=True,
+            on_startup=on_startup_polling
+        )
     else:
         executor.start_webhook(
             dispatcher=dp,
