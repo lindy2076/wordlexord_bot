@@ -32,5 +32,8 @@ build:
 down:
 	docker compose down
 
+lint:
+	flake8 word_lexord_bot
+
 %::
 	echo $(MESSAGE)
