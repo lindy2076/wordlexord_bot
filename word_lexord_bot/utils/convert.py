@@ -1,17 +1,43 @@
 import word_lexord as wl
+from .responses import Response
 
-alphabets = set(["enu", "enl", "руу", "рул"])
 
-async def try_convert(msg: str) -> int | str:
-    if len(msg) < 3 or msg[:3] not in alphabets:
-        return -1
-    
+ALPHABETS = set(["enu", "enl", "руу", "рул"])
+
+
+def only_numbers_in(s: str) -> bool:
+    """
+    Returns True if s is made of digits and spaces only.
+    """
+    s = s.replace(" ", "")
+    return s.isnumeric()
+
+
+async def try_convert(msg: str) -> str:
+    """
+    Handles a message. If it is like "[alphabet] [text]" then it is converted.
+    """
     msg_split = msg.split()
-    if len(msg_split) < 2:
-        return "что-то то должно быть!!!"
+    first_word = msg_split[0].lower()
+    if len(first_word) != 3:
+        return Response.UNKNOWN_COMMAND
 
-    lang = "abcde"
-    match msg[:3]:
+    if first_word not in ALPHABETS:
+        return Response.NO_ALPHABET
+
+    if len(msg_split) < 2:
+        return Response.NO_TEXT_GIVEN
+
+    if len(msg_split) > 100:
+        return Response.TOO_MANY_WORDS
+
+    for word in msg_split:
+        if len(word) > 2000:
+            if word.isnumeric() and len(word) < 3001:
+                continue
+            return Response.WORD_TOO_LONG
+
+    match first_word:
         case "enu":
             lang = wl.lang.ALPHABETS["EN"]["upper"]
         case "enl":
@@ -20,21 +46,19 @@ async def try_convert(msg: str) -> int | str:
             lang = wl.lang.ALPHABETS["RU"]["upper"]
         case "рул":
             lang = wl.lang.ALPHABETS["RU"]["lower"]
+        case _:
+            return Response.IMPOSSIBLE
 
+    the_text = msg[4:]
+    msg_converted = ""
 
-    try:
+    if not only_numbers_in(the_text):
+        nums = wl.get_words_numbers_in_sentence(the_text, lang)
+        if not nums:
+            return Response.LETTERS_MISSING
+        msg_converted = " ".join(map(str, nums))
+    else:
         words = wl.nums_to_words(map(int, msg_split[1:]), lang)
-    except:
-        words = None
-    
-    try:
-        nums = wl.get_words_numbers_in_sentence(msg[4:], lang)
-    except:
-        nums = None
-    
-    if words is None and nums == []:
-        return "some crazy shit happened..."
-    elif words is None:
-        return "msg: `" + " ".join(map(str, nums)) + "`"
-    
-    return "msg: `" + " ".join(words) + "`"
+        msg_converted = " ".join(words)
+
+    return Response.append_msg(Response.wrap_md_mono(msg_converted))
