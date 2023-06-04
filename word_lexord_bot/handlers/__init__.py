@@ -1,6 +1,7 @@
 from .commands import (
     send_echo, send_hello, send_info, send_commands
 )
+from .inline import inline_echo
 
 
 list_of_commands = [
@@ -12,5 +13,6 @@ list_of_commands = [
 
 
 __all__ = [
-    "lits_of_commands"
+    "lits_of_commands",
+    "inline_echo"
 ]

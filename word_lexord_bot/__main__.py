@@ -5,7 +5,7 @@ from aiogram.utils import executor
 # from aiogram.dispatcher.webhook import SendMessage
 
 from word_lexord_bot.handlers import (
-    list_of_commands
+    list_of_commands, inline_echo
 )
 from word_lexord_bot.config import DefaultSettings
 from .bot import bot
@@ -25,6 +25,7 @@ dp = Dispatcher(bot)
 def register_commands() -> None:
     for handler, handler_commands in list_of_commands:
         dp.register_message_handler(handler, commands=handler_commands)
+    dp.register_inline_handler(inline_echo)
 
 
 async def on_startup_polling(_):
