@@ -37,7 +37,7 @@ MESSAGES = {
 
 *Инлайн мод*
 
-Бот поддерживает инлайн мод (это когда пишешь @wordlexord_bot *[запрос]*).
+Бот поддерживает инлайн мод (это когда пишешь `@wordlexord_bot [запрос]`).
 Функционал такой же, только алфавит писать не нужно.
 
     Пакет: [github](https://github.com/lindy2076/words-serial-number), [PyPi](https://pypi.org/project/wordlexord/)\n
