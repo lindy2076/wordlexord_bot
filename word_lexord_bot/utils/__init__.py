@@ -1,6 +1,7 @@
-from .convert import try_convert
+from .convert import try_convert, convert_inline_mode
 
 
 __all__ = [
-    "try_convert"
+    "try_convert",
+    "convert_inline_mode"
 ]

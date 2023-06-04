@@ -1,6 +1,8 @@
 from typing import List
+import logging
+
 import word_lexord as wl
-from .responses import Response
+from .responses import Response, InlineResponse
 
 
 def word_too_long(word: str) -> bool:
@@ -85,3 +87,29 @@ def try_convert(msg: str) -> str:
         return Response.LETTERS_MISSING
 
     return Response.wrap_converted(msg_converted)
+
+
+def convert_inline_mode(msg: str, silent: int) -> str:
+    """
+    Handles inline query. If silent is 0 then response is
+      wrapped with additional info.
+    """
+    msg_split = msg.split()
+    first_word = msg_split[0]
+
+    lang = detect_alphabet(first_word)
+    if not lang:
+        logging.warning(f"convert_inline_mode lang not found: {lang}")
+
+    msg_converted = convert(msg, msg_split[1:], lang)
+    if not msg_converted:
+        return InlineResponse.LETTERS_MISSING
+
+    if silent:
+        return InlineResponse.wrap_inline_response_silent(msg_converted)
+
+    return InlineResponse.wrap_inline_response(
+        msg_converted,
+        first_word,
+        msg[4:]
+    )
