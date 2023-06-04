@@ -1,10 +1,10 @@
 MESSAGES = {
 
     "START_MESSAGE":
-    """
-    687011114!\nЭто бот, реализующий пакет [wordlexord](https://github.com/lindy2076/words-serial-number).\n
-    Пиши `инфо` для получения подробной инструкции!    
-    """,
+"""
+687011114!\nЭто бот, реализующий пакет [wordlexord](https://github.com/lindy2076/words-serial-number).\n
+Пиши `инфо` для получения подробной инструкции!    
+""",
 
     "INFO": 
 """

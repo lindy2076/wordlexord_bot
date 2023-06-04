@@ -35,5 +35,5 @@ async def send_echo(message: types.Message):
             await message.reply(MESSAGES["COMMANDS"], parse_mode="Markdown")
 
         case _:
-            converted = await wl_utils.try_convert(message.text)
+            converted = wl_utils.try_convert(message.text)
             await message.reply(converted, parse_mode="Markdown")
