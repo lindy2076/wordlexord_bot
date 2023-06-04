@@ -1,8 +1,17 @@
+from typing import List
 import word_lexord as wl
 from .responses import Response
 
 
-ALPHABETS = set(["enu", "enl", "руу", "рул"])
+def word_too_long(word: str) -> bool:
+    """
+    Returns True if word is too long.
+    """
+    if len(word) <= 2000:
+        return False
+    if len(word) <= 3000 and word.isnumeric():
+        return False
+    return True
 
 
 def only_numbers_in(s: str) -> bool:
@@ -13,7 +22,42 @@ def only_numbers_in(s: str) -> bool:
     return s.isnumeric()
 
 
-async def try_convert(msg: str) -> str:
+def detect_alphabet(code_word: str) -> str | None:
+    """
+    Returns word_lexord alphabet if code_word is an alphabet code, or
+      None otherwise.
+    """
+    lang = None
+    match code_word:
+        case "enu":
+            lang = wl.lang.ALPHABETS["EN"]["upper"]
+        case "enl":
+            lang = wl.lang.ALPHABETS["EN"]["lower"]
+        case "руу":
+            lang = wl.lang.ALPHABETS["RU"]["upper"]
+        case "рул":
+            lang = wl.lang.ALPHABETS["RU"]["lower"]
+    return lang
+
+
+def convert(msg: str, words: List[str], lang: str) -> str:
+    """
+    Converts text from msg. Words should be msg.split()[1:].
+    """
+    converted = ""
+    text = msg[4:]
+
+    if only_numbers_in(text):
+        numbers = [int(word) for word in words]
+        words = wl.nums_to_words(numbers, lang)
+        converted = " ".join(words)
+    else:
+        nums = wl.get_words_numbers_in_sentence(text, lang)
+        converted = " ".join(map(str, nums))
+    return converted
+
+
+def try_convert(msg: str) -> str:
     """
     Handles a message. If it is like "[alphabet] [text]" then it is converted.
     """
@@ -22,7 +66,8 @@ async def try_convert(msg: str) -> str:
     if len(first_word) != 3:
         return Response.UNKNOWN_COMMAND
 
-    if first_word not in ALPHABETS:
+    lang = detect_alphabet(first_word)
+    if not lang:
         return Response.NO_ALPHABET
 
     if len(msg_split) < 2:
@@ -32,33 +77,11 @@ async def try_convert(msg: str) -> str:
         return Response.TOO_MANY_WORDS
 
     for word in msg_split:
-        if len(word) > 2000:
-            if word.isnumeric() and len(word) < 3001:
-                continue
+        if word_too_long(word):
             return Response.WORD_TOO_LONG
 
-    match first_word:
-        case "enu":
-            lang = wl.lang.ALPHABETS["EN"]["upper"]
-        case "enl":
-            lang = wl.lang.ALPHABETS["EN"]["lower"]
-        case "руу":
-            lang = wl.lang.ALPHABETS["RU"]["upper"]
-        case "рул":
-            lang = wl.lang.ALPHABETS["RU"]["lower"]
-        case _:
-            return Response.IMPOSSIBLE
+    msg_converted = convert(msg, msg_split[1:], lang)
+    if not msg_converted:
+        return Response.LETTERS_MISSING
 
-    the_text = msg[4:]
-    msg_converted = ""
-
-    if not only_numbers_in(the_text):
-        nums = wl.get_words_numbers_in_sentence(the_text, lang)
-        if not nums:
-            return Response.LETTERS_MISSING
-        msg_converted = " ".join(map(str, nums))
-    else:
-        words = wl.nums_to_words(map(int, msg_split[1:]), lang)
-        msg_converted = " ".join(words)
-
-    return Response.append_msg(Response.wrap_md_mono(msg_converted))
+    return Response.wrap_converted(msg_converted)

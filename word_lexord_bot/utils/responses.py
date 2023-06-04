@@ -24,3 +24,10 @@ class Response:
         Adds 'msg: ' before s.
         """
         return "msg: " + s
+
+    @classmethod
+    def wrap_converted(cls, s: str) -> str:
+        """
+        Adds 'msg: ' before s wrapped with '`' symbols.
+        """
+        return cls.append_msg(cls.wrap_md_mono(s))
