@@ -5,6 +5,8 @@ services:
     build: .
     restart: always
     ports:
-      - "443:443"
+      - "127.0.0.1:8000:8080"
     env_file:
       - ./.env
+    volumes:
+      - '${CERT_PATH_REAL}:${CERT_PATH}'
