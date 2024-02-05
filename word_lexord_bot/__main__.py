@@ -2,7 +2,7 @@ import logging
 
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
-# from aiogram.dispatcher.webhook import SendMessage
+
 
 from word_lexord_bot.handlers import (
     list_of_commands, inline_echo
@@ -34,7 +34,10 @@ async def on_startup_polling(_):
 
 async def on_startup_webhook(_):
     logging.info("bot started with webhook!")
-    await bot.set_webhook(settings.WEBHOOK_URL)
+    await bot.set_webhook(
+        settings.WEBHOOK_URL,
+        certificate=open(settings.CERT_PATH, 'rb')
+    )
 
 
 async def on_shutdown():
@@ -45,7 +48,7 @@ async def on_shutdown():
 
 if __name__ == "__main__":
     register_commands()
-    if settings.DEBUG in ["TRUE", "True", "1"]:
+    if settings.DEBUG in ["TRUE", "True", "1", True]:
         executor.start_polling(
             dp,
             skip_updates=True,
